@@ -1,0 +1,16 @@
+⭐️ 회원가입폼에서 아이디 검사 (1. member controller ==> 2.memberServiceImpe ==> 3.MemberDAO ==> 4. member.xml 맵퍼파일(쿼리문 실행작업)
+ 맵퍼설정에 관련된 자료보기 ==> https://mybatis.org/mybatis-3/ko/configuration.html (마이바티스 공식 사이트)
+
+* 오타도 없는데 ajax 실행이 안된다?  ==>
+1) 브라우저에서 검사를 연다 -> network탭에Disabled cache체크
+2) Source 탭에 가서 해당 폴더 가고ajax 적용 됐는지 확인 (안됐으면 새로고침 계속 눌러)
+
+* comment cmd이용해서 강제로 insert하고 나중에 쿼리로 정상 댓글 추가할 때 나는 오류 메시지
+### The error may involve Comments.insert-Inline
+### The error occurred while setting parameters
+### SQL: insert into comments        values (com_seq.nextval, ?, ?, sysdate, ?)
+### Cause: java.sql.SQLIntegrityConstraintViolationException: 
+ORA-00001: unique constraint (SCOTT.SYS_C007417) violated
+===> 해결 : comments 테이블 drop || delete하고 정상적으로 댓글 추가한다
+
+* nullpointerException이 발생했다면? ==> @Autowired가 처리 잘 되어있는지 확인!
