@@ -207,7 +207,7 @@ public class BoardController {
 	}
 	
 	@PostMapping("/BoardDeleteAction.bo")
-	public ModelAndView BoardDeleteAction(String BOARD_PASS, int num, ModelAndView mv, HttpServletRequest request,
+	public ModelAndView BoardDeleteAction(String BOARD_PASS, int num, String BOARD_FILE,ModelAndView mv, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		boolean usercheck = boardService.isBoardWriter(num, BOARD_PASS);
 
@@ -222,6 +222,7 @@ public class BoardController {
 			out.close();
 			return null;
 		}
+
 		int result = boardService.boardDelete(num);
 		//삭제 처리 실패한 경우
 				if(result == 0) {
@@ -231,6 +232,7 @@ public class BoardController {
 					mv.addObject("message", "게시판 삭제 실패입니다.");
 				}
 				//삭제 처리 성공한 경우 - 글 목록 보기요청을 전송하는 부분입니다.
+				
 				System.out.println("게시판 삭제 성공");
 				response.setContentType("text/html; charset=utf-8");
 				PrintWriter out = response.getWriter();
@@ -265,7 +267,7 @@ public class BoardController {
 	@PostMapping("BoardModifyAction.bo")
 	public ModelAndView BoardModifyAction(Board board,
 				String check, ModelAndView mv, HttpServletRequest request,
-				HttpServletResponse response) throws Exception{
+				HttpServletResponse response, String before_file) throws Exception{
 		boolean usercheck = boardService.isBoardWriter(board.getBOARD_NUM(),  board.getBOARD_PASS());
 		// 비밀번호가 다른 경우
 		if (usercheck == false) {
@@ -324,6 +326,13 @@ public class BoardController {
 			mv.addObject("message", "게시판 수정 실패");
 		} else { // 수정 성공의 경우
 			System.out.println("게시판 수정 완료");
+			
+			// 수정 전에 파일이 있고 새로운 파일을 선택한 경우는 삭제할 목록을 테이블에 추가합니다.
+			if(!before_file.equals("") && !before_file.equals(board.getBOARD_FILE())) {
+				boardService.insert_deleteFile(before_file);
+			}
+			
+			
 			String url = "redirect:BoardDetailAction.bo?num=" + board.getBOARD_NUM();
 			
 			// 수정한 글 내용을 보여주기 위해 글 내용 보기 보기 페이지로 이동하기 위해 경로를 설정합니다.

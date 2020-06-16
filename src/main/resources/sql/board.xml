@@ -123,4 +123,34 @@
 										)
 	]]>
 	</delete>
+	
+	<insert id="insert_deleteFile" parameterType="String">
+		insert into delete_File
+		values(#{before_file})
+	</insert>
+	<!--  게시판이 삭제되어 더 이상 필요없는 파일들의 목록을 추가합니다. -->
+	<insert id="insert_deleteFiles" parameterType="board">
+		<![CDATA[
+		insert into delete_File
+			select  BOARD_FILE 
+			from board
+			where BOARD_RE_REF = #{BOARD_RE_REF}
+			and BOARD_RE_LEV >= #{BOARD_RE_LEV}
+			and BOARD_RE_SEQ < (
+																nvl((select min(BOARD_RE_SEQ)
+																from BOARD
+																where BOARD_RE_REF=#{BOARD_RE_REF}
+																and BOARD_RE_LEV=#{BOARD_RE_LEV}
+																and BOARD_RE_SEQ >#{BOARD_RE_SEQ}) , 
+																(select max (BOARD_RE_SEQ) +1
+																from BOARD
+																where BOARD_RE_REF=#{BOARD_RE_REF} ))
+												)
+			and BOARD_FILE is not null
+		]]>
+	</insert>
+	<!--  삭제할 파일들의 목록을 구합니다. -->
+	<select id="deleteFileList" resultType="String">
+		select board_file from delete_file
+	</select>
 </mapper>

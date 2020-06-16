@@ -31,9 +31,8 @@ label {
 		<form action="BoardModifyAction.bo" method="post"
 			  enctype="multipart/form-data" name="modifyform">
 			  <input type="hidden" name="BOARD_NUM" value="${boarddata.BOARD_NUM }">
-			  <input type="hidden" name="BOARD_FILE" value="${boarddata.BOARD_FILE}"> <!-- original값 넘겨주려고! 
-			  																						(예를들어, 기존 파일을 변경 안하고 수정버튼 누를 시 ==> 기존것을 그대로 넣기 위해서 
-			  																						BOARD의 uploadfile에 빈 값이 되지 않도록 ORIGINAL로 넣어준다.  ) -->
+			  <input type="hidden" name="BOARD_FILE" value="${boarddata.BOARD_FILE}">
+			  <input type="hidden" name="before_file" value="${boarddata.BOARD_FILE}"> <!-- delete_file 테이블 만들고 비교하려고 만든 input -->
 			<h1>MVC 게시판 - 수정</h1>	
 			<div class="form-group">
 				<label for="board_name">글쓴이</label>

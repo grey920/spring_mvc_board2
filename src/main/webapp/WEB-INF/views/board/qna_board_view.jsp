@@ -41,7 +41,7 @@
 </head>
 <body>
 <input type="hidden" id="loginid" value="${id }" name="loginid">
-
+<input type="hidden" name="before_file" value="${boarddata.BOARD_FILE}">
 	<div class="container">
 		<table class="table table-striped">
 		<tr>

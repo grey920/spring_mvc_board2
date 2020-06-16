@@ -69,6 +69,8 @@ public class BoardServiceImpl implements BoardService{
 		   int result = 0;
 		   Board board = dao.getDetail(num);
 		   if(board != null) {
+			   // 추가 - 삭제할 파일 목록들을 저장하기 위한 메서드 호출
+			  dao.insert_deleteFiles(board);
 			   result = dao.boardDelete(board);
 		   }
 	      return result;
@@ -92,6 +94,17 @@ public class BoardServiceImpl implements BoardService{
 	    dao.insertBoard(board);
 	      
 	   }
+
+	@Override
+	public int insert_deleteFile(String before_file) {
+		return dao.insert_deleteFile(before_file);
+	}
+
+	// 추가부분
+	@Override
+	public List<String> getDeleteFileList() {
+		return dao.getDeleteFileList();
+	}
 
 	
 }

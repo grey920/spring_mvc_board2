@@ -34,4 +34,9 @@ public interface BoardService {
 	
 	// 시퀀스 수정
 	public int boardReplyUpdate(Board board);
+
+	// 파일 삭제를 위한 파일명 추가하는 곳
+	public int insert_deleteFile(String before_file);
+
+	public List<String> getDeleteFileList();
 }

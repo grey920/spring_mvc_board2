@@ -64,4 +64,19 @@ public class BoardDAO {
 	}
 
 
+	public int insert_deleteFile(String before_file) {
+		return sqlSession.insert("Boards.insert_deleteFile", before_file);
+	}
+
+
+	public int insert_deleteFiles(Board board) {
+		return sqlSession.insert("Boards.insert_deleteFiles", board);
+	}
+
+
+	public List<String> getDeleteFileList() {
+		return sqlSession.selectList("Boards.deleteFileList");
+	}
+
+
 }
