@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +26,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.naver.myhome4.dao.BoardDAO;
 import com.naver.myhome4.domain.Board;
 import com.naver.myhome4.service.BoardService;
 import com.naver.myhome4.service.CommentService;
@@ -38,6 +38,15 @@ public class BoardController {
 
 	@Autowired
 	private CommentService commentService;
+	
+	//추가
+		// savefolder.properties
+		// 속성=값
+		// 의 형식으로 작성하면 됩니다.
+		// savefoldername=\\Users\\kyewoon\\spring_kh\\Spring4_MVC_BOARD2\\src\\main\\webapp\\resources\\upload
+		// 값을 가져오기 위해서는 속성(property)를 이용합니다.
+		@Value("${savefoldername}")
+		private String saveFolder;
 	
 	// 글쓰기
 	@GetMapping(value = "/BoardWrite.bo")
@@ -69,8 +78,13 @@ public class BoardController {
 			int year = c.get(Calendar.YEAR); // 오늘 년도 구합니다.
 			int month = c.get(Calendar.MONTH ) + 1; // 오늘 월 구합니다.
 			int date = c.get(Calendar.DATE); // 오늘일  구합니다.
-			String saveFolder = request.getSession().getServletContext().getRealPath("resources")
-					+ "/upload/";
+			
+			// 제거
+			//1.  이클립스 관리
+//			String saveFolder = request.getSession().getServletContext().getRealPath("resources")
+//					+ "/upload/";
+			//2. 특정 폴더
+//			String saveFolder = 	\\Users\\kyewoon\\spring_kh\\Spring4_MVC_BOARD2\\src\\main\\webapp\\resources\\upload	
 			String homedir = saveFolder + year + "-" + month + "-" + date;
 			System.out.println(homedir);
 			File path1 = new File(homedir);
@@ -266,7 +280,11 @@ public class BoardController {
 		}
 		
 		MultipartFile uploadfile = board.getUploadfile();
-		String saveFolder = request.getSession().getServletContext().getRealPath("resources")+"/upload/";
+		// 1. 이클립스 관리
+//		String saveFolder = request.getSession().getServletContext().getRealPath("resources")+"/upload/";
+		//2. 특정 폴더
+//		String saveFolder = 	\\Users\\kyewoon\\spring_kh\\Spring4_MVC_BOARD2\\src\\main\\webapp\\resources\\upload\\2020-06-16		
+		
 		System.out.println("check = " + check);
 		if(check != null && !check.equals("")) { // 기존 파일 그대로 사용하는 경우입니다.
 			System.out.println("기존 파일 그대로 사용합니다.");
