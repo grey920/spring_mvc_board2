@@ -21,4 +21,6 @@ insert into member values('jsp', 1, 'jsp', 21, '남', 'jsp@naver.com')
 insert into member
 values('java', 1, 'java', 25, '여', 'java@naver.com');
 
+alter table member modify (password varchar2(60)) ;
+
 select * from member;

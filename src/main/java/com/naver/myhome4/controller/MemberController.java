@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,9 +18,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.naver.myhome4.domain.Board;
+import com.naver.myhome4.domain.MailVO;
 import com.naver.myhome4.domain.Member;
 import com.naver.myhome4.service.MemberService;
+import com.naver.myhome4.task.SendMail;
 /*
  * @Component를 이용해서 스프링 컨테이너가 해당 클래스 객체를 생성하도록 설정할 수 있지만
  * 모든 클래스에 @Component를 할당하면 어떤 클래스가 어떤 역할을 수행하는 지 파악하기
@@ -32,6 +34,12 @@ import com.naver.myhome4.service.MemberService;
  * */
 @Controller
 public class MemberController {
+	@Autowired
+	private SendMail sendMail;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	
 	@Autowired
    private MemberService memberservice;
@@ -190,13 +198,26 @@ public class MemberController {
 	//회원가입 처리
 	@RequestMapping(value="/joinProcess.net", 
 									method= RequestMethod.POST)
-	public void joinProcess(Member member, HttpServletResponse response) throws Exception{ //커맨드 객체인 Member 이용 개 꿀
+	public void joinProcess(Member member, 
+										HttpServletResponse response) throws Exception{ //커맨드 객체인 Member 이용 개 꿀
 		response.setContentType("text/html;charset=utf-8");
 		PrintWriter out = response.getWriter();
+		
+		// 비밀번호 암호화 추가
+		String encPassword = passwordEncoder.encode(member.getPassword());
+		System.out.println(encPassword);
+		member.setPassword(encPassword);
+		
 		int result = memberservice.insert(member);  // 이전에 new 해서 MemberDAO로 갔는데 이젠 new대신 오토와이어드 사
 		out.println("<script>");
 		//삽입이 된 경우
 		if(result == 1) {
+			
+			MailVO vo = new MailVO();
+			vo.setTo(member.getEmail());
+			vo.setContent(member.getId() + "님 돈이 없으면 인생은 노잼입니다요");
+			sendMail.sendMail(vo);
+			
 			out.println("alert('회원가입을 축하합니다:) ');");
 		    out.println("location.href='login.net';");
 		} else if (result == -1) {
