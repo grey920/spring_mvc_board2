@@ -10,7 +10,7 @@ primary key(id)
 
 select * from member;
 
-
+delete MEMBER;
 
 select * from member;
 
