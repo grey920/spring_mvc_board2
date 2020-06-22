@@ -14,7 +14,7 @@ delete MEMBER;
 
 select * from member;
 
-update member set password=1 where id='admin'
+update member set password=0 where id='admin'
 
 insert into member values('jsp', 1, 'jsp', 21, '남', 'jsp@naver.com')
 
